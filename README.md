@@ -1,7 +1,7 @@
 # proxy service project
 The work in this project is based on this repository:
 https://github.com/MheniMerz/ship_discovery_agent
-Discovery agent  for SONiC spine leaf network
+A Discovery agent  for SONiC spine leaf network
 
 ## Project Overview
 [ANTD](https://www.nist.gov/itl/antd) is building the next network management system, [the multiverse network management system](https://github.com/multiverse-nms) which will support multiple networking paradigmes, essentially IP and NDN networks.
