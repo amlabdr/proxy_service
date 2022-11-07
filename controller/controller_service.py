@@ -1,13 +1,19 @@
 import time, logging, datetime
 from .request.request import Request
+from .http_server.server import HTTPServer, httpHandller
 from datetime import datetime
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
+
+from network.network import Network
 class Controller_service:
     def __init__(self,config):
         self.cfg = config
         self.request = Request()
-        self.request.url = self.cfg.controller_url
+        self.url = self.cfg.controller_url
+        self.request.url = self.url
+        self.http_server_class = HTTPServer()
+        self.http_handller = httpHandller()
         self.token = ""
 
     
@@ -43,14 +49,31 @@ class Controller_service:
         return:
             response
         """
+        net = Network()
         response = self.request.postRequest(filename = filename, token = self.token)
         logging.info("post response to {} is : {}".format(self.request.url,response))
         return response
 
+    def run_http_server(self):
+        logging.basicConfig(level=logging.INFO)
+        server = self.url.split(":")[0]
+        port = self.url.split(":")[1]
+        server_address = (server, port)
+        httpd = self.http_server_class(server_address, self.http_handller)
+        logging.info('Starting http server...\n')
+        try:
+            httpd.serve_forever()
+        except KeyboardInterrupt:
+            pass
+        httpd.server_close()
+        logging.info('Stopping httpd...\n')
 
     
-    def jsonSend():
+
+
+    
+    def jsonSend(self):
         filename = 'data.json'
         # uploading JSON file to controller
         current_request = Request()
-        current_request.postRequest(cfg.controller_url, filename)
+        current_request.postRequest(self.cfg.controller_url, filename)

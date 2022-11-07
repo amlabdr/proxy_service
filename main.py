@@ -1,18 +1,11 @@
 import argparse, logging, time
 from threading import Thread
-from paramiko import SSHClient, AutoAddPolicy
 from config.config import Config
 from controller.controller_service import Controller_service
 
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
 
-
-
-
-deviceList = []
-query_dictionary = {}
-jsonDict = {}
 
 def run(args):
     cfg = Config()
@@ -23,10 +16,10 @@ def run(args):
 
     authentication_period = int(cfg.conf_file_contents['AUTH']['authentication_period'])
     thread_authentification = Thread(target=Ctl_service.controllerAuthentication,args=(authentication_period,))
-    #thread_authentification.start()
+    thread_authentification.start()
     
     #test post file of requirements.txt
-    Ctl_service.post('requirements.txt')
+    #Ctl_service.post('requirements.txt')
 
     
 
