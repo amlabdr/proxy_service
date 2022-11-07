@@ -1,8 +1,16 @@
-import time
-from request.request import Request
-class Controller:
+import time, logging, datetime
+from .request.request import Request
+from datetime import datetime
+logger = logging.getLogger()
+logger.setLevel(logging.DEBUG)
+class Controller_service:
     def __init__(self,config):
         self.cfg = config
+        self.request = Request()
+        self.request.url = self.cfg.controller_url
+        self.token = ""
+
+    
 
     def controllerAuthentication(self, authentication_period:int):
         """Method to authenticate to the controller
@@ -11,7 +19,6 @@ class Controller:
         return:
             Token(str)
         """
-        global TOKEN
         while True:
             #update TOKEN EVERY PERIODE
             current_request = Request()
@@ -23,11 +30,23 @@ class Controller:
             try:
                 response = current_request.postRequestJson(url,data)
                 print(response.json())
-                TOKEN = response.json()['token']
+                self.token = response.json()['token']
+                #self.token = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S.%f')[:-2]
             except:    
-                print("An exception  during Authentification")
-            
+                logging.exception("An exception  during Authentification")
             time.sleep(authentication_period)
+
+    def post(self,filename):
+        """Method to post a file to the controller
+        Args:
+            filename : name of the file to post
+        return:
+            response
+        """
+        response = self.request.postRequest(filename = filename, token = self.token)
+        logging.info("post response to {} is : {}".format(self.request.url,response))
+        return response
+
 
     
     def jsonSend():
