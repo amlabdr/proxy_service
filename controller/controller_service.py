@@ -1,6 +1,7 @@
 import time, logging, datetime
 from .request.request import Request
-from .http_server.server import HTTPServer, httpHandller
+from http.server import HTTPServer
+from .http_server.server import httpHandller
 from datetime import datetime
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
@@ -12,8 +13,7 @@ class Controller_service:
         self.request = Request()
         self.url = self.cfg.controller_url
         self.request.url = self.url
-        self.http_server_class = HTTPServer()
-        self.http_handller = httpHandller()
+        self.http_handller = httpHandller
         self.token = ""
 
     
@@ -49,17 +49,17 @@ class Controller_service:
         return:
             response
         """
-        net = Network()
         response = self.request.postRequest(filename = filename, token = self.token)
         logging.info("post response to {} is : {}".format(self.request.url,response))
         return response
 
     def run_http_server(self):
         logging.basicConfig(level=logging.INFO)
-        server = self.url.split(":")[0]
-        port = self.url.split(":")[1]
+        server = self.url.split("//")[1].split(":")[0]
+        port = int(self.url.split(":")[2])
         server_address = (server, port)
-        httpd = self.http_server_class(server_address, self.http_handller)
+        logging.info("server address is {}".format(server_address))
+        httpd = HTTPServer(server_address, self.http_handller)
         logging.info('Starting http server...\n')
         try:
             httpd.serve_forever()
