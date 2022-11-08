@@ -50,11 +50,13 @@ class Network:
         jsonFile.write(json_network)
         jsonFile.close()
 
-    def thread_collect_config(self, config):
+    def thread_collect_config(self, config, ctl_service):
         periode = int(config.repeat_timer)
         while True:
             #collect the network configuration every periiode
             self.collect_config(config = config)
+            ctl_service.post('network_state.json')
+
             time.sleep(periode)
 
     def collect_config(self, config):

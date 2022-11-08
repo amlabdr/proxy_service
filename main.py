@@ -22,7 +22,7 @@ def run(args):
     thread_authentification = Thread(target=Ctl_service.controllerAuthentication,args=(authentication_period,))
     #thread_authentification.start()
 
-    Thread_get_config = Thread(target=network.thread_collect_config, args=(cfg,))
+    Thread_get_config = Thread(target=network.thread_collect_config, args=(cfg,Ctl_service))
     Thread_get_config.start()
 
 
