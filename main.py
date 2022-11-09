@@ -11,6 +11,7 @@ logger.setLevel(logging.DEBUG)
 def run(args):
     cfg = Config()
     logging.debug("username is {}".format(cfg.conf_file_contents['AUTH']['username']))
+    logging.debug("period is {}".format(cfg.conf_file_contents['AUTH']['perio']))
     logging.debug("url is {}".format(cfg.controller_url))
     Ctl_service = Controller_service(config = cfg)
     network = Network()
