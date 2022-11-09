@@ -92,7 +92,7 @@ class Network:
                     sock=vmchannel)
             except:
                 logging.error("Error in connection to device {}".format(device))
-                break;
+                continue
             if self.topology[device] == 'sonic':
                 self.sonic_data.update(self.soic_service.collectData(device = device))
             elif self.topology[device] == 'ocnos':
