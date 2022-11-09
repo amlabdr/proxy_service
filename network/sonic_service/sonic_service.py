@@ -1,4 +1,5 @@
 from network.query.query import Query
+import logging
 class Sonic_service:
     def __init__(self, client):
         self.commandList = ['show runningconfiguration all | grep -A 11 -i metadata', 'show arp', 'show ip route', 'show acl table', 'show acl rule', 'show lldp table', 'show vlan config',
@@ -27,6 +28,7 @@ class Sonic_service:
             current_query = Query(device, self.command_dict[key], key)
             current_query.send_query(self.client)
             query_dictionary[current_query.device][current_query.template] = current_query
+        logging.debug("data collected from {} is : ".format(device,query_dictionary))
         return query_dictionary
 
         

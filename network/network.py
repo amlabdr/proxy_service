@@ -90,6 +90,7 @@ class Network:
                     allow_agent = False,
                     banner_timeout = 10,
                     sock=vmchannel)
+                logging.debug("++++connected to device {} successful".format(device))
             except:
                 logging.error("Error in connection to device {}".format(device))
                 traceback.print_exc()
