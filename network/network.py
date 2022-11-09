@@ -1,6 +1,7 @@
 import json, os, logging, time, traceback
 from paramiko import SSHClient, AutoAddPolicy
 from network.sonic_service.sonic_service import Sonic_service
+from parser.parser import Parser
 
 class Network:
     def __init__(self, simulation_mode = False):
@@ -11,6 +12,7 @@ class Network:
         self.soic_service = Sonic_service(self.client)
         self.sonic_data = {}
         self.ocnos_data = {}
+        self.parser = Parser()
         if self.simulation_mode:
             self.vm = SSHClient()
     
