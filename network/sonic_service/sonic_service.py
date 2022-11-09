@@ -28,7 +28,7 @@ class Sonic_service:
             current_query = Query(device, self.command_dict[key], key)
             current_query.send_query(self.client)
             query_dictionary[current_query.device][current_query.template] = current_query
-        logging.debug("data collected from {} is : ".format(device,query_dictionary))
+        logging.debug("data collected from {} is : {} ".format(device,query_dictionary))
         return query_dictionary
 
         
