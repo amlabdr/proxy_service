@@ -1,4 +1,4 @@
-import json, os, logging, time
+import json, os, logging, time, traceback
 from paramiko import SSHClient, AutoAddPolicy
 from network.sonic_service.sonic_service import Sonic_service
 
@@ -92,6 +92,7 @@ class Network:
                     sock=vmchannel)
             except:
                 logging.error("Error in connection to device {}".format(device))
+                traceback.print_exc()
                 continue
             if self.topology[device] == 'sonic':
                 self.sonic_data.update(self.soic_service.collectData(device = device))
