@@ -10,15 +10,13 @@ logger.setLevel(logging.DEBUG)
 
 def run(args):
     cfg = Config()
-    logging.debug("username is {}".format(cfg.conf_file_contents['CONTROLLER_AUTH']['username']))
-    logging.debug("period is {}".format(cfg.conf_file_contents['CONTROLLER_AUTH']['authentification_period']))
+    #logging.debug("username is {}".format(cfg.conf_file_contents['CONTROLLER_AUTH']['username']))
     logging.debug("url is {}".format(cfg.controller_url))
     Ctl_service = Controller_service(config = cfg)
     network = Network()
     network.get_topology(cfg)
     logging.info("config is {}".format(network.topology))
     #Now it's time to authenticate to the controller.
-    logging.debug("period is {}".format(cfg.conf_file_contents['CONTROLLER_AUTH']['authentification_period']))
     authentication_period = int(cfg.conf_file_contents['CONTROLLER_AUTH']['authentification_period'])
     thread_authentification = Thread(target=Ctl_service.controllerAuthentication,args=(authentication_period,))
     thread_authentification.start()
