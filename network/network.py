@@ -85,10 +85,10 @@ class Network:
             try:
                 self.client.connect(
                     device,
-                    username=self.cfg.conf_file_contents['AUTH']['username'],
-                    password=self.cfg.conf_file_contents['AUTH']['password'],
-                    allow_agent=False,
-                    banner_timeout=10,
+                    username = config.conf_file_contents['AUTH']['username'],
+                    password = config.conf_file_contents['AUTH']['password'],
+                    allow_agent = False,
+                    banner_timeout = 10,
                     sock=vmchannel)
             except:
                 logging.error("Error in connection to device {}".format(device))
