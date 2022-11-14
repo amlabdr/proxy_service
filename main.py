@@ -8,12 +8,12 @@ logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
 
 
-def run(args):
+def run(simulation_mode):
     cfg = Config()
     #logging.debug("username is {}".format(cfg.conf_file_contents['CONTROLLER_AUTH']['username']))
     logging.debug("url is {}".format(cfg.controller_url))
     Ctl_service = Controller_service(config = cfg)
-    network = Network()
+    network = Network(simulation_mode)
     network.get_topology(cfg)
     logging.info("config is {}".format(network.topology))
     #Now it's time to authenticate to the controller.
@@ -39,6 +39,7 @@ if __name__ == '__main__':
                                  formatter_class=argparse.ArgumentDefaultsHelpFormatter )
     args_parser.add_argument("-s", "--simulation", action="store_true", help="Simulation mode")
     args = args_parser.parse_args()
-    run(args)
+    simulation_mode = vars(args)['simulation']
+    run(simulation_mode)
     print("done")
     
