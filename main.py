@@ -22,11 +22,11 @@ def run(simulation_mode):
     thread_authentification.start()
 
     Thread_get_config = Thread(target=network.thread_collect_config, args=(cfg,Ctl_service))
-    Thread_get_config.start()
+    #Thread_get_config.start()
 
 
 
-    #Ctl_service.run_http_server()
+    Ctl_service.run_http_server(network = network)
     
     #test post file of requirements.txt
     #Ctl_service.post('requirements.txt')
