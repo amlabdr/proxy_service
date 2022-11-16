@@ -8,12 +8,12 @@ logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
 
 
-def run(simulation_mode):
+def run(emmulation_mode):
     cfg = Config()
     #logging.debug("username is {}".format(cfg.conf_file_contents['CONTROLLER_AUTH']['username']))
     logging.debug("url is {}".format(cfg.controller_url))
     Ctl_service = Controller_service(config = cfg)
-    network = Network(simulation_mode)
+    network = Network(emmulation_mode)
     network.get_topology(cfg)
     logging.info("config is {}".format(network.topology))
     #Now it's time to authenticate to the controller.
@@ -26,7 +26,7 @@ def run(simulation_mode):
 
 
 
-    Ctl_service.run_http_server(network = network)
+    Ctl_service.run_http_server(network = network,cfg=cfg)
     
     #test post file of requirements.txt
     #Ctl_service.post('requirements.txt')
@@ -37,9 +37,9 @@ def run(simulation_mode):
 if __name__ == '__main__':
     args_parser = argparse.ArgumentParser(description= "proxy service to collect datad fro network and configuring the network",
                                  formatter_class=argparse.ArgumentDefaultsHelpFormatter )
-    args_parser.add_argument("-s", "--simulation", action="store_true", help="Simulation mode")
+    args_parser.add_argument("-e", "--emulation", action="store_true", help="Emulation mode")
     args = args_parser.parse_args()
-    simulation_mode = vars(args)['simulation']
-    run(simulation_mode)
+    emmulation_mode = vars(args)['emulation']
+    run(emmulation_mode)
     print("done")
     

@@ -4,16 +4,16 @@ from network.sonic_service.sonic_service import Sonic_service
 from network.parser.parser import Parser
 
 class Network:
-    def __init__(self, simulation_mode = False):
+    def __init__(self, emulation_mode = False):
         self.topology = {}
         self.client = SSHClient()
         self.loadSSH()
-        self.simulation_mode = simulation_mode
+        self.emulation_mode = emulation_mode
         self.soic_service = Sonic_service(self.client)
         self.sonic_data = {}
         self.ocnos_data = {}
         self.parser = Parser()
-        if self.simulation_mode:
+        if self.emulation_mode:
             self.vm = SSHClient()
     
     def get_topology(self,config):
@@ -62,22 +62,22 @@ class Network:
             time.sleep(periode)
 
     def collect_config(self, config):
-        if self.simulation_mode:
-            # if we will work with the simulated network
+        if self.emulation_mode:
+            # if we will work with the emulated network
             self.vm.set_missing_host_key_policy(AutoAddPolicy())
             try:
-                self.vm.connect(hostname = config.conf_file_contents['SIMULATION']['hostname'],
-                    port = int(config.conf_file_contents['SIMULATION']['port']),
-                    username = config.conf_file_contents['SIMULATION']['username'],
-                    password=config.conf_file_contents['SIMULATION']['password'],
-                    key_filename=config.conf_file_contents['SIMULATION']['key_filename'])
+                self.vm.connect(hostname = config.conf_file_contents['EMULATION']['hostname'],
+                    port = int(config.conf_file_contents['EMULATION']['port']),
+                    username = config.conf_file_contents['EMULATION']['username'],
+                    password=config.conf_file_contents['EMULATION']['password'],
+                    key_filename=config.conf_file_contents['EMULATION']['key_filename'])
             except:
-                logging.error("Connection Error to simulator")
+                logging.error("Connection Error to emulator")
                 return 0
         
         # read config file and foreach host create connection
         for device in self.topology:
-            if self.simulation_mode:
+            if self.emulation_mode:
                 vmtransport = self.vm.get_transport()
                 dest_addr = (device, 22) #edited#
                 local_addr = ('localhost', 22) #edited#
@@ -105,3 +105,68 @@ class Network:
                 pass
         self.jsonParser()
         self.client.close()
+    
+    def config_network(self, network_config, cfg, backup = False):
+        if self.emulation_mode:
+            # if we will work with the emulated network
+            self.vm.set_missing_host_key_policy(AutoAddPolicy())
+            try:
+                self.vm.connect(hostname = cfg.conf_file_contents['EMULATION']['hostname'],
+                    port = int(cfg.conf_file_contents['EMULATION']['port']),
+                    username = cfg.conf_file_contents['EMULATION']['username'],
+                    password=cfg.conf_file_contents['EMULATION']['password'],
+                    key_filename=cfg.conf_file_contents['EMULATION']['key_filename'])
+            except:
+                logging.error("Connection Error to emulator")
+                traceback.print_exc()
+                return 0
+
+        for device in json.loads(cfg.conf_file_contents['TARGETS']['devices']):
+            if (device in network_config):
+                # bind the vmchannel with each device to connect to the emulator if we are in the emulation mode otherwise NONE
+                if self.emulation_mode:
+                    vmtransport = self.vm.get_transport()
+                    dest_addr = (device, 22) #edited#
+                    local_addr = ('localhost', 22) #edited#
+                    vmchannel = vmtransport.open_channel("direct-tcpip", dest_addr, local_addr)
+                else:
+                    vmchannel = None
+                #connect to the device
+                try:
+                    self.client.connect(
+                        device,
+                        username = cfg.conf_file_contents['AUTH']['username'],
+                        password = cfg.conf_file_contents['AUTH']['password'],
+                        allow_agent = False,
+                        banner_timeout = 10,
+                        sock=vmchannel)
+                    logging.debug("++++connected to device {} successful".format(device))
+                except:
+                    logging.error("Error in connection to device {}".format(device))
+                    traceback.print_exc()
+                    self.client.close()
+                    if not backup:
+                        self.config_network(network_config,cfg,backup=True)
+                    break;
+
+                if backup: # backup mode
+                    if self.topology[device] == 'sonic':
+                        Sonic_service.backup_device()
+                    elif self.topology[device] == 'ocnos':
+                        pass
+                    else:
+                        pass
+
+                else: # regular configuration mode
+                    if self.topology[device] == 'sonic':
+                        
+                        if(self.soic_service.config_device(device = device, config = network_config[device]) != 0):
+                            logging.warning("Configuring device {} Failed, starting backup mode for all devices...")
+                            self.client.close()
+                            self.config_network(network_config,cfg,backup=True)
+                            break;
+                    elif self.topology[device] == 'ocnos':
+                        pass
+                    else:
+                        pass
+                

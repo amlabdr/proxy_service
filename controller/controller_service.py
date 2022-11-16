@@ -53,14 +53,14 @@ class Controller_service:
         logging.info("post response to {} is : {}".format(self.request.url,response))
         return response
 
-    def run_http_server(self, network):
+    def run_http_server(self, network, cfg):
         logging.basicConfig(level=logging.INFO)
         server = "localhost"
         port = 8383
         server_address = (server, port)
         logging.info("server address is {}".format(server_address))
         
-        self.http_handller.init_network(self.http_handller, network= network)
+        self.http_handller.init_network(self.http_handller, network= network, cfg=cfg)
         httpd = HTTPServer(server_address, self.http_handller)
         logging.info('Starting http server...\n')
         try:
