@@ -2,11 +2,7 @@ from network.query.query import Query
 import logging, json
 class Sonic_service:
     def __init__(self, client):
-        self.commandList = ['show runningconfiguration all | grep -A 11 -i metadata', 'show arp', 'show ip route', 'show acl table', 'show acl rule', 'show lldp table', 'show vlan config',
-               'vtysh -c "show interface"', 'show ip bgp neighbors']
-        self.headerList = ['metadata', 'arp', 'ipRoute', 'aclTable', 'aclRule', 'lldp', 'vlan', 'interface', 'bgp']
-
-        # list of commands that will be run for each node on network
+        # dictionary of commands that will be run for each node on network
         self.command_dict = {
                 'metadata': 'show runningconfiguration all | grep -A 11 -i metadata',
                 'arp': 'show arp',
