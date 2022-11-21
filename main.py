@@ -22,7 +22,7 @@ def run(emmulation_mode):
     thread_authentification.start()
 
     Thread_get_config = Thread(target=network.thread_collect_config, args=(cfg,Ctl_service))
-    #Thread_get_config.start()
+    Thread_get_config.start()
 
 
 
