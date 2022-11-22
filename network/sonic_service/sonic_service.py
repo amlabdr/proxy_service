@@ -49,7 +49,6 @@ class Sonic_service:
 
 
     def config_device(self, device, config):
-        
         config = self.ctl2sonic_parse(config)
         #open sftp session to get and put files from and to the remote device
         ftp_client=self.client.open_sftp()
