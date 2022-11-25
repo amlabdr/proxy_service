@@ -21,7 +21,6 @@ class Network:
         for node in config.network_targets.get_nodes():
             node_attributes = node.obj_dict["attributes"]
             self.topology[node_attributes['mgmt_ip'].replace('"','')] = node_attributes["os"].replace('"','')
-        print(self.topology)
 
     def loadSSH(self):
     # load host ssh keys
