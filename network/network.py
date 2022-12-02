@@ -88,8 +88,8 @@ class Network:
             try:
                 self.client.connect(
                     self.topology[device]['mgmt_ip'].replace('"',''),
-                    username = config.conf_file_contents['AUTH']['username'],
-                    password = config.conf_file_contents['AUTH']['password'],
+                    username = self.topology[device]['username'].replace('"',''),
+                    password = self.topology[device]['password'].replace('"',''),
                     allow_agent = False,
                     banner_timeout = 10,
                     sock=vmchannel)
