@@ -1,4 +1,7 @@
 graph multiverse_network {
+   
+   "spine01" [function="spine"  os="sonic" mgmt_ip="192.168.200.21" ports="32"]
+   "spine02" [function="spine"  os="sonic" mgmt_ip="192.168.200.22" ports="32"]
    "spine03" [function="spine"  os="sonic" mgmt_ip="192.168.200.23" ports="32"]
    "spine04" [function="spine"  os="sonic" mgmt_ip="192.168.200.24" ports="32"]
    "spine05" [function="spine"  os="sonic" mgmt_ip="192.168.200.25" ports="32"]
@@ -21,11 +24,4 @@ graph multiverse_network {
    "leaf11" [function="leaf"  os="sonic" mgmt_ip="192.168.200.51" ports="54"]
    "leaf12" [function="leaf"  os="sonic" mgmt_ip="192.168.200.52" ports="54"]
    "leaf13" [function="leaf"  os="sonic" mgmt_ip="192.168.200.53" ports="54"]
-   "leaf14" [function="leaf"  os="sonic" mgmt_ip="192.168.200.54" ports="54"]
-   "leaf15" [function="leaf"  os="sonic" mgmt_ip="192.168.200.55" ports="54"]
-   "leaf16" [function="leaf"  os="sonic" mgmt_ip="192.168.200.56" ports="54"]
-   "leaf17" [function="leaf"  os="sonic" mgmt_ip="192.168.200.57" ports="54"]
-   "leaf18" [function="leaf"  os="sonic" mgmt_ip="192.168.200.58" ports="54"]
-   "leaf19" [function="leaf"  os="sonic" mgmt_ip="192.168.200.59" ports="54"]
-   "leaf20" [function="leaf"  os="sonic" mgmt_ip="192.168.200.60" ports="54"]
 }
