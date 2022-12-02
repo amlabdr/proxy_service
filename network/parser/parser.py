@@ -11,7 +11,7 @@ class Parser:
 
     def parse_query_result(self, query):
         template_name = query.template
-        template_path = os.path.join(os.path.dirname(__file__),'templates/'+template_name+'.template')
+        template_path = os.path.join(os.path.dirname(__file__),'templates/sonic/'+template_name+'.template')
         with open(template_path) as template:
             fsm = textfsm.TextFSM(template)
             self.headers = fsm.header
