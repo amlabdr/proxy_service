@@ -122,12 +122,12 @@ class Network:
                 traceback.print_exc()
                 return 0
 
-        for device in json.loads(cfg.conf_file_contents['TARGETS']['devices']):
+        for device in self.topology:
             if (device in network_config):
                 # bind the vmchannel with each device to connect to the emulator if we are in the emulation mode otherwise NONE
                 if self.emulation_mode:
                     vmtransport = self.vm.get_transport()
-                    dest_addr = (device, 22) #edited#
+                    dest_addr = (self.topology[device]['mgmt_ip'].replace('"',''), 22) #edited#
                     local_addr = ('localhost', 22) #edited#
                     vmchannel = vmtransport.open_channel("direct-tcpip", dest_addr, local_addr)
                 else:
@@ -135,9 +135,9 @@ class Network:
                 #connect to the device
                 try:
                     self.client.connect(
-                        device,
-                        username = cfg.conf_file_contents['AUTH']['username'],
-                        password = cfg.conf_file_contents['AUTH']['password'],
+                        self.topology[device]['mgmt_ip'].replace('"',''),
+                        username = self.topology[device]['username'].replace('"',''),
+                        password = self.topology[device]['password'].replace('"',''),
                         allow_agent = False,
                         banner_timeout = 10,
                         sock=vmchannel)
