@@ -19,8 +19,7 @@ class Network:
     def get_topology(self,config):
         #get type of devices
         for node in config.network_targets.get_nodes():
-            node_attributes = node.obj_dict["attributes"]
-            self.topology[node_attributes['mgmt_ip'].replace('"','')] = node_attributes["os"].replace('"','')
+            self.topology[node.get_name().replace('"','')] = node.obj_dict["attributes"]
 
     def loadSSH(self):
     # load host ssh keys
@@ -81,14 +80,14 @@ class Network:
         for device in self.topology:
             if self.emulation_mode:
                 vmtransport = self.vm.get_transport()
-                dest_addr = (device, 22) #edited#
-                local_addr = ('localhost', 22) #edited#
+                dest_addr = (self.topology[device]['mgmt_ip'].replace('"',''), 22)
+                local_addr = ('localhost', 22) 
                 vmchannel = vmtransport.open_channel("direct-tcpip", dest_addr, local_addr)
             else:
                 vmchannel = None
             try:
                 self.client.connect(
-                    device,
+                    self.topology[device]['mgmt_ip'].replace('"',''),
                     username = config.conf_file_contents['AUTH']['username'],
                     password = config.conf_file_contents['AUTH']['password'],
                     allow_agent = False,
@@ -99,9 +98,9 @@ class Network:
                 logging.error("Error in connection to device {}".format(device))
                 traceback.print_exc()
                 continue
-            if self.topology[device] == 'sonic':
+            if self.topology[device]['os'].replace('"','') == 'sonic':
                 self.sonic_data.update(self.soic_service.collectData(device = device))
-            elif self.topology[device] == 'ocnos':
+            elif self.topology[device]['os'].replace('"','') == 'ocnos':
                 pass
             else:
                 pass
