@@ -10,7 +10,7 @@ Start
   ^\s+"bgp_asn":\s+"${BGP_ASN}" -> bgp_status
 			 
 bgp_status
-  ^\s+"default_bgp_status":\s+"${BGP_STATUS}" -> hostname
+  ^[\s+"default_bgp_status":\s+"${BGP_STATUS}"]? -> hostname
 
 hostname
   ^\s+"hostname":\s+"${HOSTNAME}" -> hwsku
