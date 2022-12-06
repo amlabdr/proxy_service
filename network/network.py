@@ -1,6 +1,7 @@
 import json, os, logging, time, traceback
 from paramiko import SSHClient, AutoAddPolicy
 from network.sonic_service.sonic_service import Sonic_service
+from network.ocnos_service.ocnos_service import OcnosService
 from network.parser.parser import Parser
 
 class Network:
@@ -10,6 +11,7 @@ class Network:
         self.loadSSH()
         self.emulation_mode = emulation_mode
         self.soic_service = Sonic_service(self.client)
+        self.ocnos_service = OcnosService(self.client)
         self.sonic_data = {}
         self.ocnos_data = {}
         self.parser = Parser()
@@ -101,7 +103,8 @@ class Network:
             if self.topology[device]['os'].replace('"','') == 'sonic':
                 self.sonic_data.update(self.soic_service.collectData(device = device))
             elif self.topology[device]['os'].replace('"','') == 'ocnos':
-                pass
+                self.ocnos_data.update(self.ocnos_service.collectData(device = device))
+
             else:
                 pass
         self.jsonParser()
