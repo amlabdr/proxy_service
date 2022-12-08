@@ -1,0 +1,9 @@
+Value IP_Address (\d+\.\d+\.\d+\.\d+)
+Value Age (\d+:\d+:\d+)
+Value MAC_Address ([0-9A-Fa-f]{4}\.[0-9A-Fa-f]{4}\.[0-9A-Fa-f]{4})
+Value Interface (\S+)
+Value State (\w+)
+
+Start
+  ^Address\s+Age\s+MAC\s+Address\s+Interface\s+State\n -> Record
+  ^${IP_Address}\ ${Age}\ ${MAC_Address}\ ${Interface}\ ${State} -> Record

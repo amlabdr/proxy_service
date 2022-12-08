@@ -24,8 +24,6 @@ def run(emmulation_mode):
     Thread_get_config = Thread(target=network.thread_collect_config, args=(cfg,Ctl_service))
     Thread_get_config.start()
 
-
-
     Ctl_service.run_http_server(network = network,cfg=cfg)
     
     #test post file of requirements.txt

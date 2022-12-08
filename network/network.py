@@ -1,6 +1,7 @@
 import json, os, logging, time, traceback
 from paramiko import SSHClient, AutoAddPolicy
 from network.sonic_service.sonic_service import Sonic_service
+from network.ocnos_service.ocnos_service import OcnosService
 from network.parser.parser import Parser
 
 class Network:
@@ -10,6 +11,7 @@ class Network:
         self.loadSSH()
         self.emulation_mode = emulation_mode
         self.soic_service = Sonic_service(self.client)
+        self.ocnos_service = OcnosService(self.client)
         self.sonic_data = {}
         self.ocnos_data = {}
         self.parser = Parser()
@@ -18,7 +20,8 @@ class Network:
     
     def get_topology(self,config):
         #get type of devices
-        self.topology={device : 'sonic' for device in json.loads(config.conf_file_contents['TARGETS']['devices'])}
+        for node in config.network_targets.get_nodes():
+            self.topology[node.get_name().replace('"','')] = node.obj_dict["attributes"]
 
     def loadSSH(self):
     # load host ssh keys
@@ -79,16 +82,16 @@ class Network:
         for device in self.topology:
             if self.emulation_mode:
                 vmtransport = self.vm.get_transport()
-                dest_addr = (device, 22) #edited#
-                local_addr = ('localhost', 22) #edited#
+                dest_addr = (self.topology[device]['mgmt_ip'].replace('"',''), 22)
+                local_addr = ('localhost', 22) 
                 vmchannel = vmtransport.open_channel("direct-tcpip", dest_addr, local_addr)
             else:
                 vmchannel = None
             try:
                 self.client.connect(
-                    device,
-                    username = config.conf_file_contents['AUTH']['username'],
-                    password = config.conf_file_contents['AUTH']['password'],
+                    self.topology[device]['mgmt_ip'].replace('"',''),
+                    username = self.topology[device]['username'].replace('"',''),
+                    password = self.topology[device]['password'].replace('"',''),
                     allow_agent = False,
                     banner_timeout = 10,
                     sock=vmchannel)
@@ -97,10 +100,11 @@ class Network:
                 logging.error("Error in connection to device {}".format(device))
                 traceback.print_exc()
                 continue
-            if self.topology[device] == 'sonic':
+            if self.topology[device]['os'].replace('"','') == 'sonic':
                 self.sonic_data.update(self.soic_service.collectData(device = device))
-            elif self.topology[device] == 'ocnos':
-                pass
+            elif self.topology[device]['os'].replace('"','') == 'ocnos':
+                self.ocnos_data.update(self.ocnos_service.collectData(device = device))
+
             else:
                 pass
         self.jsonParser()
@@ -121,12 +125,12 @@ class Network:
                 traceback.print_exc()
                 return 0
 
-        for device in json.loads(cfg.conf_file_contents['TARGETS']['devices']):
+        for device in self.topology:
             if (device in network_config):
                 # bind the vmchannel with each device to connect to the emulator if we are in the emulation mode otherwise NONE
                 if self.emulation_mode:
                     vmtransport = self.vm.get_transport()
-                    dest_addr = (device, 22) #edited#
+                    dest_addr = (self.topology[device]['mgmt_ip'].replace('"',''), 22) #edited#
                     local_addr = ('localhost', 22) #edited#
                     vmchannel = vmtransport.open_channel("direct-tcpip", dest_addr, local_addr)
                 else:
@@ -134,9 +138,9 @@ class Network:
                 #connect to the device
                 try:
                     self.client.connect(
-                        device,
-                        username = cfg.conf_file_contents['AUTH']['username'],
-                        password = cfg.conf_file_contents['AUTH']['password'],
+                        self.topology[device]['mgmt_ip'].replace('"',''),
+                        username = self.topology[device]['username'].replace('"',''),
+                        password = self.topology[device]['password'].replace('"',''),
                         allow_agent = False,
                         banner_timeout = 10,
                         sock=vmchannel)

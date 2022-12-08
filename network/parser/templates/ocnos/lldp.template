@@ -1,0 +1,13 @@
+Value Local_Port_ID (\S+)
+Value Remote_Host_Name (\S+)
+Value Remote_Chassis_Id (\S+)
+Value Remote_Port_Id (\S+)
+Value Agent_Mode ([\S|\s]+)
+
+Start
+  ^Loc\s+PortID\s+Rem\s+Host\s+Name\s+Rem\s+Chassis\s+Id\s+Rem\s+Port\s+Id\s+Agent\s+Mode
+  ^-+ -> Row
+
+Row
+  ^${Local_Port_ID}\s+${Remote_Host_Name}\s+${Remote_Chassis_Id}\s+${Remote_Port_Id}\s+${Agent_Mode} -> Record
+

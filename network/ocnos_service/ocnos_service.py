@@ -1,17 +1,17 @@
 from network.query.query import Query
 import logging, json
-class Sonic_service:
+class OcnosService:
     def __init__(self, client):
         # dictionary of commands that will be run for each node on network
         self.command_dict = {
-                'metadata': 'show runningconfiguration all | grep -A 11 -i metadata',
+                #'metadata': 'show runningconfiguration all | grep -A 11 -i metadata', # no equivalent
                 'arp': 'show arp',
                 'ipRoute': 'show ip route',
-                'aclTable': 'show acl table',
-                'aclRule': 'show acl rule',
-                'lldp': 'show lldp table',
-                'vlan': 'show vlan config',
-                'interface': 'vtysh -c "show interface"',
+                #'aclTable': 'show acl table',
+                #'aclRule': 'show acl rule',
+                'lldp': 'show lldp neighbors breif',
+                'vlan': 'show vlan brief',
+                'interface': 'show interface',
                 'bgp': 'show ip bgp neighbors'
         }
         self.client = client
@@ -42,7 +42,7 @@ class Sonic_service:
         return config
 
     def backup_device(self):
-        cmd = "sudo cp /etc/sonic/config_db.json.bk /etc/sonic/config_db.json"
+        cmd = "copy running-config file:/running-config-bkp"
         self.exe_cmd(cmd)
         cmd = "sudo config reload -y"
         self.exe_cmd(cmd)

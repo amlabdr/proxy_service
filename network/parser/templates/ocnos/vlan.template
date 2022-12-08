@@ -1,0 +1,18 @@
+Value Bridge_ID (\d+)
+Value Vlan_ID (\d+)
+Value Name (\w+)
+Value State (\w+)
+Value Member_Ports ([\w?]+)
+
+Start
+  ^Bridge\s+VLAN\s+ID\s+Name\s+State\s+Member\s+ports\n -> Header
+			 
+Header
+  ^\s+[\S+\s+]+ -> Header2
+		
+Header2
+  ^[=|\s]+ -> Row
+					
+Row
+  ^${Bridge_ID}+\s+${Vlan_ID}\s+${Name}\s+${State}\s+${Member_Ports}\n -> Record
+
