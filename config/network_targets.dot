@@ -1,12 +1,4 @@
 graph pni_network {
-   "spine01" [function="spine"  os="sonic" mgmt_ip="10.11.200.6" ports="32" username="admin" password="YourPaSsWoRd"]
-   "spine02" [function="spine"  os="sonic" mgmt_ip="10.11.200.7" ports="32" username="admin" password="YourPaSsWoRd"]
-   "leaf01" [function="leaf"  os="sonic" mgmt_ip="10.11.200.8" ports="32" username="admin" password="YourPaSsWoRd"]
-   "leaf02" [function="leaf"  os="sonic" mgmt_ip="10.11.200.9" ports="32" username="admin" password="YourPaSsWoRd"]
-
-   "aggregator-225-01" [function="aggregator"  os="sonic" mgmt_ip="10.11.200.20" ports="54" username="admin" password="YourPaSsWoRd"]
-   "aggregator-225-02" [function="aggregator"  os="sonic" mgmt_ip="10.11.200.21" ports="54" username="admin" password="YourPaSsWoRd"]
-   
    "dcqnet-nist-ctrl-01" [function="dcqnet-ctrl"  os="ocnos" mgmt_ip="10.11.200.18" ports="54" username="ocnos" password="ocnos"]
    "dcqnet-nist-ctrl-02" [function="dcqnet-ctrl"  os="ocnos" mgmt_ip="10.11.200.19" ports="54" username="ocnos" password="ocnos"]
 }
