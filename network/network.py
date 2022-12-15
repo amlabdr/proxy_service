@@ -170,7 +170,7 @@ class Network:
                             self.config_network(network_config,cfg,backup=True)
                             break;
                     elif self.topology[device] == 'ocnos':
-                        print("###will conf ocnos"))
+                        print("###will conf ocnos")
                         self.ocnos_service.config_device(device=device, config= network_config[device])
                     else:
                         pass
