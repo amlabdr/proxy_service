@@ -30,6 +30,4 @@ class Config:
             return graph[0]
         except IOError:
             logging.error("*********** ERROR reading network targets file **********")
-            print(self.conf_file_path)
-            print(self.network_targets_file_path)
             exit(1)
