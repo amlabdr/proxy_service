@@ -41,7 +41,8 @@ class httpHandller(BaseHTTPRequestHandler):
                 traceback.print_exc()
             self._set_response()
             self.wfile.write("POST request for {}".format(self.path).encode('utf-8'))
-            
+
+            logging.info("now will call config in network")
             self.network.config_network(network_config, self.cfg)
             
         else:
