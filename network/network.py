@@ -163,6 +163,7 @@ class Network:
                         pass
 
                 else: # regular configuration mode
+                    logging.info("will enter regular mode")
                     if self.topology[device] == 'sonic':
                         
                         if(self.soic_service.config_device(device = device, config = network_config[device]) != 0):
