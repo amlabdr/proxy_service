@@ -163,15 +163,15 @@ class Network:
                         pass
 
                 else: # regular configuration mode
-                    logging.info("will enter regular mode")
-                    if self.topology[device] == 'sonic':
+                    logging.info("will enter regular mode {}".format(self.topology[device]))
+                    if self.topology[device]['os'].replace('"','') == 'sonic':
                         
                         if(self.soic_service.config_device(device = device, config = network_config[device]) != 0):
                             logging.warning("Configuring device {} Failed, starting backup mode for all devices...")
                             self.client.close()
                             self.config_network(network_config,cfg,backup=True)
                             break;
-                    elif self.topology[device] == 'ocnos':
+                    elif self.topology[device]['os'].replace('"','') == 'ocnos':
                         logging.info("###will conf ocnos")
                         self.ocnos_service.config_device(device=device, config= network_config[device])
                     else:
