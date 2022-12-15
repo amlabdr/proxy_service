@@ -25,6 +25,7 @@ class OcnosService:
         for line in stderr.readlines():
             status=1
             output += line
+        logging.info("output of {} : {}".format(cmd,output))
         return status
 
     def collectData(self,device):
