@@ -111,6 +111,7 @@ class Network:
         self.client.close()
     
     def config_network(self, network_config, cfg, backup = False):
+        logging.info("will conf network")
         if self.emulation_mode:
             # if we will work with the emulated network
             self.vm.set_missing_host_key_policy(AutoAddPolicy())
@@ -170,7 +171,7 @@ class Network:
                             self.config_network(network_config,cfg,backup=True)
                             break;
                     elif self.topology[device] == 'ocnos':
-                        print("###will conf ocnos")
+                        logging.info("###will conf ocnos")
                         self.ocnos_service.config_device(device=device, config= network_config[device])
                     else:
                         pass
