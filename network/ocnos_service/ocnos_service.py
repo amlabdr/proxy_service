@@ -40,8 +40,9 @@ class OcnosService:
         return query_dictionary
     
     def ctl2ocnos_parse(self, config):
-        interface = config['INTERFACE'].split('|')[0]
-        ip = config['INTERFACE'].split('|')[1]
+        for interface_ip in config['INTERFACE']:
+            interface = interface_ip.split('|')[0]
+            ip = interface_ip.split('|')[1] 
         commands = ['enable', 'configure terminal', 'interface '+interface, 'ip address '+ip, 'exit', 'commit', 'end', 'disable']
 
         return commands
