@@ -6,8 +6,8 @@ class Config:
     def __init__(self):
         self.repeat_timer = os.environ.get('REPEAT_TIMER','10')
         self.controller_url = os.environ.get('CONTROLLER_URL','http://10.11.200.125:8787')
-        self.conf_file_path = os.environ.get('CONF_FILE', "config/config.ini")
-        self.network_targets_file_path = os.environ.get('NET_TARGETS', 'config/network_targets.dot')
+        self.conf_file_path = os.environ.get('CONF_FILE', "configuration_ms/config/config.ini")
+        self.network_targets_file_path = os.environ.get('NET_TARGETS', 'configuration_ms/config/network_targets.dot')
         self.conf_file_contents = self.read_config()
         self.network_targets = self.read_network_targets()
     

@@ -1,0 +1,20 @@
+    <network-instances xmlns="http://openconfig.net/yang/network-instance">
+        <network-instance>
+            <name>{bridge}</name>
+            <config>
+                <name>{bridge}</name>
+                <type xmlns:oc-ni-types="http://openconfig.net/yang/network-instance-types">oc-ni-types:L2L3</type>
+                <enabled>true</enabled>
+            </config>
+            <vlans>
+                <vlan  operation = "{operation}">
+                    <vlan-id>{vlan-id}</vlan-id>
+                    <config>
+                        <vlan-id>{vlan-id}</vlan-id>
+                        <name>{name}</name>
+                        <status>ACTIVE</status>
+                    </config>
+                </vlan>
+            </vlans>
+        </network-instance>
+    </network-instances>

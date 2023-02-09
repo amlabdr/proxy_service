@@ -4,7 +4,7 @@ from http.server import HTTPServer
 from .http_server.server import httpHandller
 from datetime import datetime
 logger = logging.getLogger()
-logger.setLevel(logging.DEBUG)
+#logger.setLevel(logging.DEBUG)
 
 from network.network import Network
 class Controller_service:
